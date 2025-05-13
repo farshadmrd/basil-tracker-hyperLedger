@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 @Contract(
-        name = "basic",
+        name = "BasilContract",
         info = @Info(
                 title = "My Smart contract",
                 description = "The hyperlegendary asset transfer",
