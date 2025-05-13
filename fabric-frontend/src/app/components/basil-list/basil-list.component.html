@@ -1,0 +1,147 @@
+<div class="container">
+  <h2 class="text-center mb-4">Basil Management System</h2>
+
+  <!-- Error and Success Messages -->
+  <div *ngIf="error" class="alert alert-danger" role="alert">
+    {{ error }}
+  </div>
+  <div *ngIf="success" class="alert alert-success" role="alert">
+    {{ success }}
+  </div>
+
+  <!-- Search Basil -->
+  <div class="card mb-4">
+    <div class="card-header bg-primary text-white">
+      <h3 class="mb-0">Search Basil</h3>
+    </div>
+    <div class="card-body">
+      <form (ngSubmit)="searchBasilById()" class="d-flex gap-2">
+        <div class="form-group flex-grow-1">
+          <input type="text" class="form-control" placeholder="Enter Basil ID" [(ngModel)]="searchBasil.id" name="id" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Search</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Create New Basil -->
+  <div class="card mb-4">
+    <div class="card-header bg-success text-white">
+      <h3 class="mb-0">Create New Basil</h3>
+    </div>
+    <div class="card-body">
+      <form (ngSubmit)="createBasil()">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="id">ID:</label>
+              <input type="text" class="form-control" id="id" [(ngModel)]="newBasil.id" name="id" required>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="country">Country:</label>
+              <input type="text" class="form-control" id="country" [(ngModel)]="newBasil.country" name="country" required>
+            </div>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-success mt-3">Create Basil</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Selected Basil Details -->
+  <div class="card mb-4" *ngIf="selectedBasil">
+    <div class="card-header bg-info text-white">
+      <h3 class="mb-0">Basil Details</h3>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-6">
+          <h4>Basic Information</h4>
+          <div class="info-group">
+            <p><strong>ID:</strong> {{ selectedBasil.qrCode }}</p>
+            <p><strong>Origin:</strong> {{ selectedBasil.origin }}</p>
+            <p><strong>Status:</strong> {{ selectedBasil.currentStatus }}</p>
+            <p><strong>Current GPS:</strong> {{ selectedBasil.currentGps }}</p>
+            <p><strong>Owner:</strong> {{ selectedBasil.currentOwner?.name }} ({{ selectedBasil.currentOwner?.orgId }})</p>
+          </div>
+          <button class="btn btn-danger" (click)="deleteBasil(selectedBasil.qrCode)">Delete Basil</button>
+        </div>
+
+        <!-- Update State Form -->
+        <div class="col-md-6">
+          <h4>Update State</h4>
+          <form (ngSubmit)="updateBasilState(selectedBasil.qrCode)">
+            <div class="form-group">
+              <label for="gps">GPS:</label>
+              <input type="text" class="form-control" id="gps" [(ngModel)]="updateState.gps" name="gps" required>
+            </div>
+            <div class="form-group">
+              <label for="temp">Temperature:</label>
+              <input type="text" class="form-control" id="temp" [(ngModel)]="updateState.temp" name="temp" required>
+            </div>
+            <div class="form-group">
+              <label for="humidity">Humidity:</label>
+              <input type="text" class="form-control" id="humidity" [(ngModel)]="updateState.humidity" name="humidity" required>
+            </div>
+            <div class="form-group">
+              <label for="status">Status:</label>
+              <input type="text" class="form-control" id="status" [(ngModel)]="updateState.status" name="status" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Update State</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Transfer Ownership Form -->
+      <div class="mt-4">
+        <h4>Transfer Ownership</h4>
+        <form (ngSubmit)="transferBasilOwnership(selectedBasil.qrCode)" class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="newOrgId">New Organization ID:</label>
+              <input type="text" class="form-control" id="newOrgId" [(ngModel)]="transfer.newOrgId" name="newOrgId" required>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="newName">New Owner Name:</label>
+              <input type="text" class="form-control" id="newName" [(ngModel)]="transfer.newName" name="newName" required>
+            </div>
+          </div>
+          <div class="col-12">
+            <button type="submit" class="btn btn-warning">Transfer Ownership</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Transport History -->
+      <div class="mt-4">
+        <h4>Transport History</h4>
+        <div class="table-responsive">
+          <table class="table table-striped">
+            <thead class="thead-dark">
+              <tr>
+                <th>Timestamp</th>
+                <th>GPS</th>
+                <th>Temperature</th>
+                <th>Humidity</th>
+                <th>Owner</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let record of selectedBasil.transportHistory">
+                <td>{{ record.timestamp * 1000 | date:'medium' }}</td>
+                <td>{{ record.gps }}</td>
+                <td>{{ record.temperature }}</td>
+                <td>{{ record.humidity }}</td>
+                <td>{{ record.owner.user }} ({{ record.owner.orgId }})</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

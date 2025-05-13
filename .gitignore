@@ -1,0 +1,139 @@
+# Java
+*.class
+*.log
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar
+hs_err_pid*
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+# Angular
+.DS_Store
+node_modules/
+/dist
+/tmp
+/out-tsc
+/bazel-out
+.angular/
+.sass-cache/
+connect.lock
+coverage/
+/libpeerconnection.log
+testem.log
+/typings
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDE
+.idea/
+*.swp
+*.swo
+.vscode/
+*.iml
+*.iws
+*.ipr
+.project
+.classpath
+.settings/
+
+# System Files
+.DS_Store
+Thumbs.db
+
+# Ignore Gradle build files
+.gradle/
+out/
+!gradle/wrapper/gradle-wrapper.jar
+
+# Ignore IDE-specific files
+*.iml
+.idea/
+.vscode/
+*.swp
+
+# Ignore OS-specific files
+.DS_Store
+Thumbs.db
+
+# Ignore logs and temporary files
+*.log
+*.tmp
+*.bak
+*.swp
+*.swo
+
+# Ignore Java build files
+*.class
+*.jar
+*.war
+*.ear
+bin/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+# Ignore application-specific files
+application-template/src/main/java/App.class
+application-template/src/main/java/App$*.class
+
+# Ignore chaincode build files
+chaincode-template/src/main/java/org/hyperledger/fabric/samples/*.class
+
+# Ignore node_modules (if applicable)
+node_modules/
+package-lock.json
+
+# Ignore environment files
+.env
+.env.local
+.env.*.local
+.env.development
+.env.test
+.env.production
+
+# Ignore generated files
+*.tar.gz
+*.zip
+*.tar
+*.gz
+dist/
+
+# Ignore certificates and keys
+*.pem
+*.crt
+*.key
+*.cert
+*.pfx
+*.p12
+
+# Ignore test network artifacts
+organizations/
+docker-compose*.yaml
+*.block
+*.tx
+wallet/
+crypto-config/
+channel-artifacts/
+ledgers-backup/
+fabric-ca/
+
+# Ignore Hyperledger Fabric specific
+connection-*.json
+fabric-ca-client-config.yaml
+
+# Ignore compiled TypeScript/JavaScript (if applicable)
+*.js.map
+*.d.ts
+
+# Backup files
+*~
