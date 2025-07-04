@@ -47,6 +47,13 @@
   box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
 }
 
+/* Disabled form styles */
+.form-control:disabled {
+  background-color: #e9ecef;
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 .btn {
   display: inline-block;
   font-weight: 500;
@@ -89,6 +96,18 @@
   color: #212529;
   background-color: #ffc107;
   border-color: #ffc107;
+}
+
+/* Secondary button styles */
+.btn-secondary {
+  background-color: #6c757d;
+  border-color: #6c757d;
+  color: #fff;
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background-color: #5a6268;
+  border-color: #545b62;
 }
 
 .table {
@@ -173,4 +192,30 @@
 
 .flex-grow-1 {
   flex-grow: 1;
-} 
+}
+
+/* Organization Selection Styles */
+.badge-success {
+  background-color: #28a745;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 1rem;
+  font-size: 0.9rem;
+}
+
+.badge-warning {
+  background-color: #ffc107;
+  color: #212529;
+  padding: 0.5rem 1rem;
+  border-radius: 1rem;
+  font-size: 0.9rem;
+}
+
+/* Organization indicator */
+.org-status {
+  font-weight: bold;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  display: inline-block;
+  margin-top: 0.5rem;
+}

@@ -1,6 +1,33 @@
 <div class="container">
   <h2 class="text-center mb-4">Basil Management System</h2>
 
+  <!-- Organization Selection -->
+  <div class="card mb-4">
+    <div class="card-header bg-info text-white">
+      <h4 class="mb-0">Organization Selection</h4>
+    </div>
+    <div class="card-body">
+      <div class="form-group">
+        <label for="organization">Select Organization:</label>
+        <select 
+          id="organization" 
+          class="form-control" 
+          [(ngModel)]="selectedOrganization" 
+          (change)="onOrganizationChange()"
+          name="organization">
+          <option *ngFor="let org of organizations" [ngValue]="org">
+            {{ org.name }} ({{ org.id }})
+          </option>
+        </select>
+      </div>
+      <div class="mt-2">
+        <span class="badge" [ngClass]="canWrite ? 'badge-success' : 'badge-warning'">
+          {{ canWrite ? 'Full Access' : 'Read-Only Access' }}
+        </span>
+      </div>
+    </div>
+  </div>
+
   <!-- Error and Success Messages -->
   <div *ngIf="error" class="alert alert-danger" role="alert">
     {{ error }}
@@ -35,17 +62,37 @@
           <div class="col-md-6">
             <div class="form-group">
               <label for="id">ID:</label>
-              <input type="text" class="form-control" id="id" [(ngModel)]="newBasil.id" name="id" required>
+              <input 
+                type="text" 
+                class="form-control" 
+                id="id" 
+                [(ngModel)]="newBasil.id" 
+                name="id" 
+                [disabled]="!canWrite"
+                required>
             </div>
           </div>
           <div class="col-md-6">
             <div class="form-group">
               <label for="country">Country:</label>
-              <input type="text" class="form-control" id="country" [(ngModel)]="newBasil.country" name="country" required>
+              <input 
+                type="text" 
+                class="form-control" 
+                id="country" 
+                [(ngModel)]="newBasil.country" 
+                name="country" 
+                [disabled]="!canWrite"
+                required>
             </div>
           </div>
         </div>
-        <button type="submit" class="btn btn-success mt-3">Create Basil</button>
+        <button 
+          type="submit" 
+          class="btn mt-3"
+          [ngClass]="canWrite ? 'btn-success' : 'btn-secondary'"
+          [disabled]="!canWrite">
+          {{ canWrite ? 'Create Basil' : 'Create Disabled (Read-Only)' }}
+        </button>
       </form>
     </div>
   </div>
@@ -66,7 +113,13 @@
             <p><strong>Current GPS:</strong> {{ selectedBasil.currentGps }}</p>
             <p><strong>Owner:</strong> {{ selectedBasil.currentOwner?.name }} ({{ selectedBasil.currentOwner?.orgId }})</p>
           </div>
-          <button class="btn btn-danger" (click)="deleteBasil(selectedBasil.qrCode)">Delete Basil</button>
+          <button 
+            class="btn"
+            [ngClass]="canWrite ? 'btn-danger' : 'btn-secondary'"
+            [disabled]="!canWrite"
+            (click)="deleteBasil(selectedBasil.qrCode)">
+            {{ canWrite ? 'Delete Basil' : 'Delete Disabled (Read-Only)' }}
+          </button>
         </div>
 
         <!-- Update State Form -->
@@ -75,21 +128,55 @@
           <form (ngSubmit)="updateBasilState(selectedBasil.qrCode)">
             <div class="form-group">
               <label for="gps">GPS:</label>
-              <input type="text" class="form-control" id="gps" [(ngModel)]="updateState.gps" name="gps" required>
+              <input 
+                type="text" 
+                class="form-control" 
+                id="gps" 
+                [(ngModel)]="updateState.gps" 
+                name="gps" 
+                [disabled]="!canWrite"
+                required>
             </div>
             <div class="form-group">
               <label for="temp">Temperature:</label>
-              <input type="text" class="form-control" id="temp" [(ngModel)]="updateState.temp" name="temp" required>
+              <input 
+                type="text" 
+                class="form-control" 
+                id="temp" 
+                [(ngModel)]="updateState.temp" 
+                name="temp" 
+                [disabled]="!canWrite"
+                required>
             </div>
             <div class="form-group">
               <label for="humidity">Humidity:</label>
-              <input type="text" class="form-control" id="humidity" [(ngModel)]="updateState.humidity" name="humidity" required>
+              <input 
+                type="text" 
+                class="form-control" 
+                id="humidity" 
+                [(ngModel)]="updateState.humidity" 
+                name="humidity" 
+                [disabled]="!canWrite"
+                required>
             </div>
             <div class="form-group">
               <label for="status">Status:</label>
-              <input type="text" class="form-control" id="status" [(ngModel)]="updateState.status" name="status" required>
+              <input 
+                type="text" 
+                class="form-control" 
+                id="status" 
+                [(ngModel)]="updateState.status" 
+                name="status" 
+                [disabled]="!canWrite"
+                required>
             </div>
-            <button type="submit" class="btn btn-primary">Update State</button>
+            <button 
+              type="submit" 
+              class="btn"
+              [ngClass]="canWrite ? 'btn-primary' : 'btn-secondary'"
+              [disabled]="!canWrite">
+              {{ canWrite ? 'Update State' : 'Update Disabled (Read-Only)' }}
+            </button>
           </form>
         </div>
       </div>
@@ -101,17 +188,37 @@
           <div class="col-md-6">
             <div class="form-group">
               <label for="newOrgId">New Organization ID:</label>
-              <input type="text" class="form-control" id="newOrgId" [(ngModel)]="transfer.newOrgId" name="newOrgId" required>
+              <input 
+                type="text" 
+                class="form-control" 
+                id="newOrgId" 
+                [(ngModel)]="transfer.newOrgId" 
+                name="newOrgId" 
+                [disabled]="!canWrite"
+                required>
             </div>
           </div>
           <div class="col-md-6">
             <div class="form-group">
               <label for="newName">New Owner Name:</label>
-              <input type="text" class="form-control" id="newName" [(ngModel)]="transfer.newName" name="newName" required>
+              <input 
+                type="text" 
+                class="form-control" 
+                id="newName" 
+                [(ngModel)]="transfer.newName" 
+                name="newName" 
+                [disabled]="!canWrite"
+                required>
             </div>
           </div>
           <div class="col-12">
-            <button type="submit" class="btn btn-warning">Transfer Ownership</button>
+            <button 
+              type="submit" 
+              class="btn"
+              [ngClass]="canWrite ? 'btn-warning' : 'btn-secondary'"
+              [disabled]="!canWrite">
+              {{ canWrite ? 'Transfer Ownership' : 'Transfer Disabled (Read-Only)' }}
+            </button>
           </div>
         </form>
       </div>
