@@ -25,7 +25,7 @@ import io.grpc.TlsChannelCredentials;
 
 @Service
 public class FabricService {
-    private static final Path PATH_TO_TEST_NETWORK = Paths.get("/home/farshadmrd/go/src/github.com/farshadmrd/fabric-samples/test-network");
+    private static final Path PATH_TO_TEST_NETWORK = Paths.get("/home/farshad/go/src/github.com/farshadmrd/fabric-samples/test-network");
     private static final String CHANNEL_NAME = System.getenv().getOrDefault("CHANNEL_NAME", "mychannel");
     private static final String CHAINCODE_NAME = System.getenv().getOrDefault("CHAINCODE_NAME", "basic");
     private static final String PEER_ENDPOINT = "localhost:7051";
