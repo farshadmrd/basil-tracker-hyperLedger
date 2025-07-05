@@ -115,10 +115,10 @@
           </div>
           <button 
             class="btn"
-            [ngClass]="canWrite ? 'btn-danger' : 'btn-secondary'"
-            [disabled]="!canWrite"
+            [ngClass]="canDelete ? 'btn-danger' : 'btn-secondary'"
+            [disabled]="!canDelete"
             (click)="deleteBasil(selectedBasil.qrCode)">
-            {{ canWrite ? 'Delete Basil' : 'Delete Disabled (Read-Only)' }}
+            {{ canDelete ? 'Delete Basil' : (selectedOrganization.disabled && selectedBasil.currentOwner?.orgId !== selectedOrganization.id ? 'Delete Disabled (Not Owner)' : 'Delete Disabled (Read-Only)') }}
           </button>
         </div>
 

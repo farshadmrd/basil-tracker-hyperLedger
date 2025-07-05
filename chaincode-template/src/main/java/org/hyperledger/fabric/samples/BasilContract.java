@@ -62,7 +62,6 @@ public class BasilContract implements ContractInterface {
     // Stop tracking a basil plant (delete it)
     @Transaction(intent = Transaction.TYPE.SUBMIT)
     public void deleteBasil(Context ctx, String qrCode) {
-        rejectIfSupermarket(ctx);
         ChaincodeStub stub = ctx.getStub();
         Basil basil = readBasil(ctx, qrCode);
 

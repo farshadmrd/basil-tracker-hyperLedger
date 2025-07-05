@@ -101,8 +101,78 @@ public class FabricService {
     
 
     public String deleteBasil(String id) throws GatewayException, CommitException {
+        // First, check who owns the basil
+        String basilData = readBasil(id);
+        
+        // Parse the JSON to check ownership (simple string check)
+        if (basilData.contains("\"orgId\":\"Org2MSP\"")) {
+            // For now, we'll create a connection as Org2MSP to delete the basil
+            return deleteBasilAsOrg2(id);
+        }
+        
+        // If owned by Org1MSP, use the existing connection
         contract.submitTransaction("deleteBasil", id);
         return "Basil deleted successfully";
+    }
+    
+    private String deleteBasilAsOrg2(String id) throws GatewayException, CommitException {
+        Gateway org2Gateway = null;
+        ManagedChannel org2Channel = null;
+        
+        try {
+            // Create Org2MSP connection
+            ChannelCredentials org2Credentials = TlsChannelCredentials.newBuilder()
+                    .trustManager(PATH_TO_TEST_NETWORK.resolve(Paths.get(
+                            "organizations/peerOrganizations/org2.example.com/" +
+                                    "peers/peer0.org2.example.com/tls/ca.crt"))
+                            .toFile())
+                    .build();
+
+            org2Channel = Grpc.newChannelBuilder("localhost:9051", org2Credentials)
+                    .overrideAuthority("peer0.org2.example.com")
+                    .build();
+
+            Gateway.Builder org2Builder = Gateway.newInstance()
+                    .identity(new X509Identity("Org2MSP",
+                            Identities.readX509Certificate(
+                                    Files.newBufferedReader(
+                                            PATH_TO_TEST_NETWORK.resolve(Paths.get(
+                                                    "organizations/peerOrganizations/org2.example.com/" +
+                                                            "users/User1@org2.example.com/msp/signcerts/cert.pem"))))))
+                    .signer(
+                            Signers.newPrivateKeySigner(
+                                    Identities.readPrivateKey(
+                                            Files.newBufferedReader(
+                                                    Files.list(PATH_TO_TEST_NETWORK.resolve(
+                                                            Paths.get(
+                                                                    "organizations/peerOrganizations/org2.example.com/"
+                                                                            +
+                                                                            "users/User1@org2.example.com/msp/keystore")))
+                                                            .findFirst().orElseThrow()))))
+                    .connection(org2Channel)
+                    .evaluateOptions(options -> options.withDeadlineAfter(5, TimeUnit.SECONDS))
+                    .endorseOptions(options -> options.withDeadlineAfter(15, TimeUnit.SECONDS))
+                    .submitOptions(options -> options.withDeadlineAfter(5, TimeUnit.SECONDS))
+                    .commitStatusOptions(options -> options.withDeadlineAfter(1, TimeUnit.MINUTES));
+
+            org2Gateway = org2Builder.connect();
+            Contract org2Contract = org2Gateway.getNetwork(CHANNEL_NAME).getContract(CHAINCODE_NAME);
+            
+            // Perform the delete as Org2MSP
+            org2Contract.submitTransaction("deleteBasil", id);
+            return "Basil deleted successfully by Org2MSP";
+            
+        } catch (Exception e) {
+            throw new RuntimeException("Error deleting basil as Org2MSP: " + e.getMessage(), e);
+        } finally {
+            // Cleanup
+            if (org2Gateway != null) {
+                org2Gateway.close();
+            }
+            if (org2Channel != null) {
+                org2Channel.shutdownNow();
+            }
+        }
     }
 
     public String updateBasilState(String id, String gps, Long timestamp, String temp, String humidity, String status) 

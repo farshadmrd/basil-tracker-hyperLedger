@@ -50,6 +50,21 @@ export class BasilListComponent {
     return !this.selectedOrganization.disabled;
   }
 
+  // Check if current organization can delete the selected basil (owner can delete)
+  get canDelete(): boolean {
+    if (!this.selectedBasil) {
+      return false;
+    }
+    
+    // If organization is not disabled (Org1MSP), they can delete
+    if (!this.selectedOrganization.disabled) {
+      return true;
+    }
+    
+    // If organization is disabled (Org2MSP), they can only delete if they own the basil
+    return this.selectedBasil.currentOwner?.orgId === this.selectedOrganization.id;
+  }
+
   // Handle organization change
   onOrganizationChange(): void {
     this.clearMessages();
@@ -112,8 +127,8 @@ export class BasilListComponent {
   }
 
   deleteBasil(id: string): void {
-    if (!this.canWrite) {
-      this.error = 'Operation not permitted for the supermarket organization.';
+    if (!this.canDelete) {
+      this.error = 'You can only delete basils that you own.';
       return;
     }
 

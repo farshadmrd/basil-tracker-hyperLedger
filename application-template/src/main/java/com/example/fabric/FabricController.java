@@ -38,8 +38,10 @@ public class FabricController {
     @DeleteMapping("/basil/{id}")
     public ResponseEntity<String> deleteBasil(@PathVariable String id) {
         try {
-            fabricService.deleteBasil(id);
-            return ResponseEntity.ok("Basil deleted successfully");
+            String result = fabricService.deleteBasil(id);
+            return ResponseEntity.ok(result);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         } catch (GatewayException | CommitException e) {
             return ResponseEntity.internalServerError().body("Error deleting basil: " + e.getMessage());
         }
