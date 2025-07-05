@@ -18,8 +18,11 @@ export class BasilService {
     return this.http.get<string>(`${this.apiUrl}/${id}`);
   }
 
-  deleteBasil(id: string): Observable<string> {
-    return this.http.delete<string>(`${this.apiUrl}/${id}`);
+  deleteBasil(id: string): Observable<any> {
+    return this.http.delete(
+      `${this.apiUrl}/${id}`,
+      { responseType: 'text' }
+    );
   }
 
   updateBasilState(id: string, gps: string, timestamp: number, temp: string, humidity: string, status: string): Observable<string> {

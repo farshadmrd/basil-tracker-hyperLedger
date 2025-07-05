@@ -135,12 +135,24 @@ export class BasilListComponent {
     if (confirm('Are you sure you want to delete this basil?')) {
       this.basilService.deleteBasil(id).subscribe({
         next: (response) => {
-          this.success = 'Basil deleted successfully';
+          console.log('Delete response:', response);
+          this.success = response || 'Basil deleted successfully';
           this.error = '';
           this.selectedBasil = null;
         },
         error: (err) => {
-          this.error = 'Error deleting basil: ' + err.message;
+          console.error('Delete error details:', err);
+          let errorMessage = 'Error deleting basil';
+          
+          if (err.error && typeof err.error === 'string') {
+            errorMessage += ': ' + err.error;
+          } else if (err.message) {
+            errorMessage += ': ' + err.message;
+          } else if (err.status) {
+            errorMessage += ': HTTP ' + err.status;
+          }
+          
+          this.error = errorMessage;
         }
       });
     }
