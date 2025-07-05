@@ -29,10 +29,11 @@ export class BasilService {
     );
   }
 
-  transferBasilOwnership(id: string, newOrgId: string, newName: string): Observable<string> {
-    return this.http.put<string>(
+  transferBasilOwnership(id: string, newOrgId: string, newName: string): Observable<any> {
+    return this.http.put(
       `${this.apiUrl}/${id}/transfer?newOrgId=${newOrgId}&newName=${newName}`,
-      {}
+      {},
+      { responseType: 'text' }
     );
   }
 }

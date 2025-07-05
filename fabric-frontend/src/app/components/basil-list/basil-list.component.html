@@ -187,28 +187,19 @@
         <form (ngSubmit)="transferBasilOwnership(selectedBasil.qrCode)" class="row">
           <div class="col-md-6">
             <div class="form-group">
-              <label for="newOrgId">New Organization ID:</label>
-              <input 
-                type="text" 
+              <label for="transferOrganization">Select Organization:</label>
+              <select 
+                id="transferOrganization" 
                 class="form-control" 
-                id="newOrgId" 
-                [(ngModel)]="transfer.newOrgId" 
-                name="newOrgId" 
+                [(ngModel)]="transfer.selectedOrganization" 
+                name="transferOrganization"
                 [disabled]="!canWrite"
                 required>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group">
-              <label for="newName">New Owner Name:</label>
-              <input 
-                type="text" 
-                class="form-control" 
-                id="newName" 
-                [(ngModel)]="transfer.newName" 
-                name="newName" 
-                [disabled]="!canWrite"
-                required>
+                <option [ngValue]="null">-- Select Organization --</option>
+                <option *ngFor="let org of organizations" [ngValue]="org">
+                  {{ org.name }} ({{ org.id }})
+                </option>
+              </select>
             </div>
           </div>
           <div class="col-12">

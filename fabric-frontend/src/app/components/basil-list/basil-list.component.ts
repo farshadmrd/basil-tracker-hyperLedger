@@ -40,8 +40,7 @@ export class BasilListComponent {
   };
 
   transfer = {
-    newOrgId: '',
-    newName: ''
+    selectedOrganization: null as any
   };
 
   constructor(private basilService: BasilService) {}
@@ -170,20 +169,31 @@ export class BasilListComponent {
       return;
     }
 
-    if (!this.transfer.newOrgId || !this.transfer.newName) {
-      this.error = 'Please fill in all fields';
+    if (!this.transfer.selectedOrganization) {
+      this.error = 'Please select an organization';
       return;
     }
 
-    this.basilService.transferBasilOwnership(id, this.transfer.newOrgId, this.transfer.newName).subscribe({
+    this.basilService.transferBasilOwnership(id, this.transfer.selectedOrganization.id, this.transfer.selectedOrganization.name).subscribe({
       next: (response) => {
         this.success = 'Basil ownership transferred successfully';
         this.error = '';
-        this.transfer = { newOrgId: '', newName: '' };
+        this.transfer = { selectedOrganization: null };
         this.searchBasilById();
       },
       error: (err) => {
-        this.error = 'Error transferring basil ownership: ' + err.message;
+        console.error('Transfer error details:', err);
+        let errorMessage = 'Error transferring basil ownership';
+        
+        if (err.error && typeof err.error === 'string') {
+          errorMessage += ': ' + err.error;
+        } else if (err.message) {
+          errorMessage += ': ' + err.message;
+        } else if (err.status) {
+          errorMessage += ': HTTP ' + err.status;
+        }
+        
+        this.error = errorMessage;
       }
     });
   }
