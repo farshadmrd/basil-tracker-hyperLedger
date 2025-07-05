@@ -21,8 +21,8 @@
         </select>
       </div>
       <div class="mt-2">
-        <span class="badge" [ngClass]="canWrite ? 'badge-success' : 'badge-warning'">
-          {{ canWrite ? 'Full Access' : 'Read-Only Access' }}
+        <span class="badge" [ngClass]="selectedOrganization.id === 'Org1MSP' ? 'badge-success' : 'badge-warning'">
+          {{ selectedOrganization.id === 'Org1MSP' ? 'Full Access' : 'Read-Only Access' }}
         </span>
       </div>
     </div>
@@ -68,7 +68,7 @@
                 id="id" 
                 [(ngModel)]="newBasil.id" 
                 name="id" 
-                [disabled]="!canWrite"
+                [disabled]="!canCreate"
                 required>
             </div>
           </div>
@@ -81,7 +81,7 @@
                 id="country" 
                 [(ngModel)]="newBasil.country" 
                 name="country" 
-                [disabled]="!canWrite"
+                [disabled]="!canCreate"
                 required>
             </div>
           </div>
@@ -89,9 +89,9 @@
         <button 
           type="submit" 
           class="btn mt-3"
-          [ngClass]="canWrite ? 'btn-success' : 'btn-secondary'"
-          [disabled]="!canWrite">
-          {{ canWrite ? 'Create Basil' : 'Create Disabled (Read-Only)' }}
+          [ngClass]="canCreate ? 'btn-success' : 'btn-secondary'"
+          [disabled]="!canCreate">
+          {{ canCreate ? 'Create Basil' : 'Create Disabled (Read-Only)' }}
         </button>
       </form>
     </div>
@@ -118,7 +118,7 @@
             [ngClass]="canDelete ? 'btn-danger' : 'btn-secondary'"
             [disabled]="!canDelete"
             (click)="deleteBasil(selectedBasil.qrCode)">
-            {{ canDelete ? 'Delete Basil' : (selectedOrganization.disabled && selectedBasil.currentOwner?.orgId !== selectedOrganization.id ? 'Delete Disabled (Not Owner)' : 'Delete Disabled (Read-Only)') }}
+            {{ canDelete ? 'Delete Basil' : 'Delete Disabled (Not Owner)' }}
           </button>
         </div>
 
@@ -175,7 +175,7 @@
               class="btn"
               [ngClass]="canWrite ? 'btn-primary' : 'btn-secondary'"
               [disabled]="!canWrite">
-              {{ canWrite ? 'Update State' : 'Update Disabled (Read-Only)' }}
+              {{ canWrite ? 'Update State' : 'Update Disabled (Not Owner)' }}
             </button>
           </form>
         </div>
@@ -210,7 +210,7 @@
               class="btn"
               [ngClass]="canWrite ? 'btn-warning' : 'btn-secondary'"
               [disabled]="!canWrite">
-              {{ canWrite ? 'Transfer Ownership' : 'Transfer Disabled (Read-Only)' }}
+              {{ canWrite ? 'Transfer Ownership' : 'Transfer Disabled (Not Owner)' }}
             </button>
           </div>
         </form>

@@ -45,9 +45,25 @@ export class BasilListComponent {
 
   constructor(private basilService: BasilService) {}
 
-  // Check if current organization has permission for write operations
+  // Check if current organization can create new basil (only Org1 can always create)
+  get canCreate(): boolean {
+    // Org1 (Greenhouse) can always create new basil plants
+    return this.selectedOrganization.id === 'Org1MSP';
+  }
+
+  // Check if current organization has permission for write operations (update/transfer)
   get canWrite(): boolean {
-    return !this.selectedOrganization.disabled;
+    if (!this.selectedBasil) {
+      return false;
+    }
+    
+    // Org2 (disabled) can never modify
+    if (this.selectedOrganization.disabled) {
+      return false;
+    }
+    
+    // Org1 can only modify if they own the basil
+    return this.selectedBasil.currentOwner?.orgId === this.selectedOrganization.id;
   }
 
   // Check if current organization can delete the selected basil (owner can delete)
@@ -56,12 +72,7 @@ export class BasilListComponent {
       return false;
     }
     
-    // If organization is not disabled (Org1MSP), they can delete
-    if (!this.selectedOrganization.disabled) {
-      return true;
-    }
-    
-    // If organization is disabled (Org2MSP), they can only delete if they own the basil
+    // Both organizations can only delete if they own the basil
     return this.selectedBasil.currentOwner?.orgId === this.selectedOrganization.id;
   }
 
@@ -70,11 +81,14 @@ export class BasilListComponent {
     this.clearMessages();
     if (this.selectedOrganization.disabled) {
       this.error = `${this.selectedOrganization.name} organization has read-only access. Create, Update, Delete, and Transfer operations are disabled.`;
+    } else {
+      // Clear any previous error messages when switching to Org1
+      this.error = '';
     }
   }
 
   createBasil(): void {
-    if (!this.canWrite) {
+    if (!this.canCreate) {
       this.error = 'Operation not permitted for the supermarket organization.';
       return;
     }
@@ -160,7 +174,7 @@ export class BasilListComponent {
 
   updateBasilState(id: string): void {
     if (!this.canWrite) {
-      this.error = 'Operation not permitted for the supermarket organization.';
+      this.error = 'You can only modify basils that you own.';
       return;
     }
 
@@ -204,7 +218,7 @@ export class BasilListComponent {
 
   transferBasilOwnership(id: string): void {
     if (!this.canWrite) {
-      this.error = 'Operation not permitted for the supermarket organization.';
+      this.error = 'You can only transfer ownership of basils that you own.';
       return;
     }
 
