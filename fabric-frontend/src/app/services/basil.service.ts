@@ -25,10 +25,11 @@ export class BasilService {
     );
   }
 
-  updateBasilState(id: string, gps: string, timestamp: number, temp: string, humidity: string, status: string): Observable<string> {
-    return this.http.put<string>(
+  updateBasilState(id: string, gps: string, timestamp: number, temp: string, humidity: string, status: string): Observable<any> {
+    return this.http.put(
       `${this.apiUrl}/${id}/state?gps=${gps}&timestamp=${timestamp}&temp=${temp}&humidity=${humidity}&status=${status}`,
-      {}
+      {},
+      { responseType: 'text' }
     );
   }
 

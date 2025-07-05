@@ -179,13 +179,25 @@ export class BasilListComponent {
       this.updateState.status
     ).subscribe({
       next: (response) => {
-        this.success = 'Basil state updated successfully';
+        console.log('Update response:', response);
+        this.success = response || 'Basil state updated successfully';
         this.error = '';
         this.updateState = { gps: '', temp: '', humidity: '', status: '' };
         this.searchBasilById();
       },
       error: (err) => {
-        this.error = 'Error updating basil state: ' + err.message;
+        console.error('Update error details:', err);
+        let errorMessage = 'Error updating basil state';
+        
+        if (err.error && typeof err.error === 'string') {
+          errorMessage += ': ' + err.error;
+        } else if (err.message) {
+          errorMessage += ': ' + err.message;
+        } else if (err.status) {
+          errorMessage += ': HTTP ' + err.status;
+        }
+        
+        this.error = errorMessage;
       }
     });
   }
