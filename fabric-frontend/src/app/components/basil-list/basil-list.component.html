@@ -196,9 +196,11 @@
                 [disabled]="!canWrite"
                 required>
                 <option [ngValue]="null">-- Select Organization --</option>
-                <option *ngFor="let org of organizations" [ngValue]="org">
-                  {{ org.name }} ({{ org.id }})
-                </option>
+                <ng-container *ngFor="let org of organizations">
+                  <option *ngIf="org.id !== 'Org1MSP'" [ngValue]="org">
+                    {{ org.name }} ({{ org.id }})
+                  </option>
+                </ng-container>
               </select>
             </div>
           </div>
